@@ -1,0 +1,60 @@
+
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Item - Add<br />
+            <h6 class="h4-heading"></h6>
+        </a>
+        <img  src="../../assets/images/home-icon.png" width="50" height="30" (click)="homeButtonClicked()">
+    </nav>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col mt-5">
+
+                <form [formGroup]="addItemForm" (ngSubmit)="onSubmit(addItemForm.value)">
+                    <div class="form-group">
+                        <h1>Add Item</h1>
+                    </div>
+  
+                    <div class="form-row">
+                      <div class="form-group col-md-2">
+
+
+                        <label for="inputItemCode">Item Group</label>
+                        <select id="itemGroup" name="itemGroup" class="form-control" (change)="onValueChange($event)">
+                          <option *ngFor="let itemGroupName of itemGroupArray">
+                            {{ itemGroupName }}
+                          </option>
+                        </select>
+
+
+                      </div>
+                      <div class="form-group col-md-2">
+                        <label for="inputItemCode">Code</label>
+                        <input type="text" class="form-control" id="inputItemCode" formControlName="itemCode">
+                      </div>
+                      <div class="form-group col-md-8">
+                        <label for="inputItemName">Name</label>
+                        <input type="text" class="form-control" id="inputItemName" formControlName="itemName">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputItemDescription">Description</label>
+                        <textarea class="form-control" id="inputItemDescription" rows="3" formControlName="itemDescription"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputItemName">Load Item Image</label>
+                        <input id="inputItemImage" class="form-control-file" type="file" (change)="onFileChanged($event)">
+                        <img [src]="localUrl" *ngIf="localUrl" class="imgPlaceholder" width="300" height="300">
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+
+            </div>
+        </div>
+    </div>
