@@ -1,0 +1,28 @@
+.item-container {
+    background-color: rgb(0, 217, 255);
+}
+
+.gray-back {
+    background-color: rgb(225, 222, 226);
+}
+
+.item-color2 {
+    background-color: rgb(0, 255, 128);
+}
+
+.item-color3 {
+    background-color: rgb(255, 0, 34);
+}
+
+.item-color4 {
+    background-color: rgb(255, 238, 0);
+}
+
+.delete_button {
+    border-radius: 25%;
+    border: 2px solid rgb(250, 103, 103); /* Green */
+}
+
+.delete_button:hover {
+    background-color: #f44336;
+}

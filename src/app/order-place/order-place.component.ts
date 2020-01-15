@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder} from '@angular/forms';
-import { FormArray } from '@angular/forms';
+import { OrderItemComponent } from './order-item/order-item.component';
+import { OrderItems, OrderItemsForBackend } from '../models/OrderItems';
 
-import { ItemService } from '../services/item.service';
+import { OrderService } from '../services/order.service';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -12,57 +13,78 @@ import { ItemService } from '../services/item.service';
   styleUrls: ['./order-place.component.css']
 })
 export class OrderPlaceComponent implements OnInit {
-
-  orderForm : any;
-  itemMaster: ItemMaster[];
-  item_iist: any;
-  ImageSource: any
-
-  placeOrderForm = this.fb.group({
-    purchaseItem: this.fb.array([
-      this.fb.control({
-        item:[''],
-        quantity:['']
-      })
-    ])
-  });
-
-  constructor(private router: Router, private itemService: ItemService, private fb: FormBuilder) { }
-
-  ngOnInit() {
-    this.itemService.getItemsWithoutImage().subscribe((returnItemMaster: any) => {
-      this.itemMaster = returnItemMaster;  
-      console.log(returnItemMaster)
-
-    })  
-  }
-
-  homeButtonClicked(): void {
-    this.router.navigate(['main-menue'], { skipLocationChange: true });
-  }
+  orderItems: OrderItems[] = [{itemGroup:"", itemID:"",itemName:"",quantity:0}];
+  orderItemsForBackend: OrderItemsForBackend[] = [{itemGroup:"", itemID:"",quantity:0}];
   
-  onSubmit() {
+
+    // ===== constructor 
+    constructor(private router: Router, private orderService: OrderService) { }
+
+    // ===== ngOnInit 
+    ngOnInit() {
 
   }
 
-  addItemLine() {
-    this.purchaseItem.push(this.fb.control(''));
+    // ===== addItem 
+    addItem(orderItem: OrderItems) {
+    this.orderItems.push(orderItem);
+
+    const item = {
+      itemGroup: orderItem.itemGroup,
+      itemID: orderItem.itemID,
+      quantity: Number(orderItem.quantity)
+    }
+    this.orderItemsForBackend.push(item)
+
+    if(this.orderItems[0].itemGroup === "") {
+      this.orderItems.shift()
+      this.orderItemsForBackend.shift()
+    }
+
   }
 
-  get purchaseItem() {
-    return this.placeOrderForm.get('purchaseItem') as FormArray;
+    // ===== Delete button clicked
+  onDeleteItem(index: any) {
+    this.orderItems.splice(index,1)
+    this.orderItemsForBackend.splice(index,1)
   }
 
-}
 
-/*=====================================*/
-/*  ------- Interface: ItemMaster ------- */
-/*=====================================*/
-interface ItemMaster {
-  itemNumber : number;
-  itemGroup : string;
-  itemID : string;
-  itemDescription : string;
-  itemName : string;
-  itemImage : Blob;
+    // ===== Home button clicked
+    homeButtonClicked(): void {
+      this.router.navigate(['main-menue'], { skipLocationChange: true });
+    }
+  
+    // ===== Submit button clicked
+    onSubmit(event: any) {
+        //console.log(this.orderItemsForBackend)
+
+        const orderJSON = {
+          header: {
+            lastUpdate: formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss', 'en-US'),
+            userId: "Shashi Dalmia"
+          },
+          itemDetails: this.orderItemsForBackend
+        }      
+
+        // console.log(JSON.stringify(orderJSON))
+
+        this.orderService.placeOrder(JSON.stringify(orderJSON)).subscribe(
+          res => {
+            console.log(res);
+            const resJSON = res.json()
+            window.alert("Order Number : " + resJSON.orderNumber);
+            this.orderItems.length = 0;
+            this.orderItemsForBackend.length=0
+            },
+          err => { 
+            console.log("->"+err)
+            });
+    
+  
+
+    }
+
+
+
 }

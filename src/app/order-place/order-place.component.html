@@ -1,43 +1,39 @@
-<!-- <div *ngIf="!userLoggedIn; else formInfo"> -->
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Order System<br />
-            <h6 class="h4-heading"></h6>
-        </a>
-        <img  src="../../assets/images/home-icon.png" width="50" height="30" (click)="homeButtonClicked()">
-    </nav>
-    
-    <div class="container">
-        <div class="row">
-            <div class="col mt-5">
-                <form [formGroup]="placeOrderForm" (ngSubmit)="onSubmit()">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <h1>Create Order</h1>
-                      </div>
-                      <!-- ROW-1-->
-                      
-                      <div formArrayName="purchaseItem">
-                        <h3>Aliases</h3> <button (click)="addItemLine()">Add Item</button>
-                    
-                        <div *ngFor="let address of purchaseItem.controls; let i=index">
-                          <!-- The repeated alias template -->
-                          <div class="row">
-                              <div class="col-3">
-                                <input type="text" [formControlName]="i">
-                              </div>
-                              <div class="col-3">
-                                <input type="text" [formControlName]="i">
-                              </div>
-                          </div>
-                        </div>
-                      </div>                          
-                    </div>
-                </form>
-              </div>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Order System<br />
+        <h6 class="h4-heading"></h6>
+    </a>
+    <img  src="../../assets/images/home-icon.png" width="50" height="30" (click)="homeButtonClicked()">
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <app-order-item (addItem)="addItem($event)"></app-order-item>
         </div>
-        <div class="row pt-5">
-            <div class="col-2">
-                <input type="submit" class="btn btn-lg btn-primary btn-block" value="submit">
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-2 gray-back border border-dark">Item Group</div>
+        <div class="col-2 gray-back border border-dark">Item ID</div>
+        <div class="col-5 gray-back border border-dark">Name</div>
+        <div class="col-2 gray-back border border-dark">Quantity</div>
+        <div class="col-1 gray-back border border-dark">Delete?</div>
+    </div>
+<div *ngFor="let orderItem of orderItems;  let i = index" [attr.data-index]="i">
+        <div class="row">
+            <div class="col-2 border border-dark">{{ orderItem.itemGroup }}</div>
+            <div class="col-2 border border-dark">{{ orderItem.itemID }}</div>
+            <div class="col-5 border border-dark">{{ orderItem.itemName }}</div>
+            <div class="col-2 border border-dark">{{ orderItem.quantity }}</div>
+            <div class="col-1 border border-dark text-center">
+                <Button class="del delete_button" (click)="onDeleteItem(i)"> x </Button>
             </div>
         </div>
-  </div>
+    </div>
+
+    <div class="row">
+        <input class="btn btn-primary mt-3" type="submit" value="Submit" (click)="onSubmit($event)">
+    </div>
+
+</div>
