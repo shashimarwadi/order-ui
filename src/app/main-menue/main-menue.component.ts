@@ -17,7 +17,7 @@ export class MainMenueComponent implements OnInit {
   }
 
   whichButtomWasClicked(value): void {
-    console.log(value)
+    // console.log(value)
 
     switch (value) {
       case "item": {

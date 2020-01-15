@@ -13,6 +13,7 @@ import { OrderPlaceComponent } from './order-place/order-place.component';
 import { ItemAddComponent } from './item-add/item-add.component';
 import { OrderService } from './services/order.service';
 import { ItemService } from './services/item.service';
+import { OrderItemComponent } from './order-place/order-item/order-item.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ItemService } from './services/item.service';
     LoginComponent,
     MainMenueComponent,
     OrderPlaceComponent,
-    ItemAddComponent
+    ItemAddComponent,
+    OrderItemComponent
   ],
   imports: [
     BrowserModule,
